@@ -1,0 +1,144 @@
+#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <unistd.h>
+
+using namespace std;
+
+int NumOfStrings(string input) {
+int count = 1;
+   for (int x=0;x<input.length()+1;x++) 
+   { 
+       if (input[x] == ' ') 
+       { 
+           count = count +1;
+       } 
+   }
+    cout<<"TOTAL NUMBER OF WORDS: "<<count<<" \n"<<endl;
+    return count;
+		}
+
+string SplitWord(string input, int find) 
+{ 
+   int count = 0;
+   string word = ""; 
+   for (int x=0;x<input.length()+1;x++) 
+   { 
+       if (input[x] == ' ') 
+       { 
+           count = count +1;
+           if(find==count){
+               return word;
+           } 
+           word = ""; 
+       } 
+       else
+       { 
+           word = word + input[x]; 
+       }
+   }
+    return word;
+} 
+
+char* LineToCstring(string input, int NumWord) {
+    string conversion = SplitWord(input,NumWord);
+
+	cout<<"COVERSION: "<<conversion<<endl;
+    
+    char * cstring = new char [conversion.length()+1];
+    strcpy (cstring, conversion.c_str());
+    
+    return cstring;
+    }
+
+string NextDirectory(string FullPath,int count){
+//Search Through Directories
+      string directory = "";
+      int NumCol = 0;
+      cout<<"FULLPATH: "<<FullPath<<endl;
+      for(int a=0;a<FullPath.length();a++){
+	if(FullPath[a]!= ':'){
+	  directory = directory + FullPath[a];
+	}else{
+	  NumCol=NumCol+1;
+	  if(NumCol!=count){
+	    directory = "";
+	  }else{
+	    break;}
+	}
+      }
+      cout<<"RETURNING: "<<directory<<endl;
+      return directory;
+}
+
+string FullPathName(char* Path) {
+    string FullPath = "";
+    if(Path[0]=='/' || (Path[0]=='.')&&(Path[1]=='/') || (Path[0]=='.')&&(Path[1]=='.')&&(Path[2]=='/')){
+        FullPath = Path;
+        cout<<"WINNING FULL PATH:"<<FullPath<<endl;
+    }else{
+
+      int i = 0;
+      while(environ[i]) {
+	FullPath=environ[i];
+	if(!FullPath.find("PATH")){
+	  cout<<FullPath<<endl;
+	}
+	i++;
+      }
+      int count = 1;
+      string directory = "";
+      bool FileFound = false;
+      
+      while(FileFound == false){
+	directory = NextDirectory(FullPath,count);
+	//take directory name and search the directory by trying to open file
+	//If file cannot be opened then go to next directory
+	count=count+1;
+	cout<<"DIRECTORY: "<<directory<<endl;
+	if(count==2){
+	  FileFound=true;
+	}
+      }
+    }
+    return FullPath;
+}
+
+extern char **environ;
+int main(void) {
+	string line = "";
+	int argc;
+	char* argv[100];
+
+	do {
+		//-----------PART A1----------------
+		  //Print command line prompt
+		cout << "Zoe's Shell > ";
+		//Get command line
+		getline(cin, line);
+		cout<<" "<<endl;
+		//cout << "Command was: " << line << endl;
+
+		if ((line == "exit") || cin.eof())
+		{
+			exit(0);
+		}
+
+		argc=NumOfStrings(line); //Finds Number of Strings in the line
+        
+        for(int i=0;i<argc;i++){
+        argv[i]=LineToCstring(line, i+1); //Converts to Cstring and Has an array of pointers point to cstrings
+        }
+        argv[argc]=NULL; //Sets spot after cstrings to NULL in pointers
+        
+        //Find Full PathName For File
+        string FullPath = FullPathName(argv[0]);
+        
+        
+		//execvp(&argv);
+
+	} while ((line != "^D") && (line != "exit"));
+
+	return 0;
+}
