@@ -1,0 +1,77 @@
+
+#include <pthread.h> 
+#include <semaphore.h> 
+#include <stdio.h> 
+#include <unistd.h>
+#include <iostream>
+#include <stdlib.h>     /* srand, rand */ 
+#include<bits/stdc++.h> 
+using namespace std; 
+
+string rascal[] = { "Spanky","Alfalfa","Darla" }; 
+string topping[] = {"Jimmies","Ice Cream","Chocolate Sauce"};
+int top=0;
+int N=2;
+sem_t mutex; 
+sem_t S[3]; 
+
+void eat(int topping);
+int MissCrabtree();
+void *Rascals(void *rascal);
+
+void eat(int topping) 
+{ 
+  
+    sem_post(&S[topping]); 
+    cout<<rascal[topping]<<" is eating. \n"<<endl; 
+	int t = rand() % 5;
+    sem_wait(&S[topping]); 
+	sleep(t);
+} 
+  
+// put down chopsticks 
+int MissCrabtree() 
+{
+    sem_wait(&S[N]); 
+	int t = rand() % 3;
+	cout<<"Miss Crabtree Put Down: "<< topping[t]<<"."<<endl;
+    sem_post(&S[N]); 
+	return t;
+} 
+
+void *Rascals(void *rasc) 
+{ 
+	int count = 10;
+	bool continuous = true;
+    while(continuous) { 
+		if(count!=0){
+		int topping = MissCrabtree(); 
+        eat(topping); 
+		count--;
+			cout<<"COUNT: "<<count<<endl;
+		}else{
+			exit(0);
+		}
+    } 
+} 
+  
+int main() 
+{ 
+  
+    int i; 
+    pthread_t thread_id[N]; 
+  
+    for (i = 0; i < N;i++) {
+        sem_init(&S[i], 0, 0);
+	}//Block 3 rascals
+
+		sem_init(&S[N],0,1); //Allow Miss Crabtree to start
+	
+    for (i = 0; i < N; i++) { 
+        // create rascal processes 
+        pthread_create(&thread_id[i], NULL, Rascals,(void *)&rascal[i]);
+    } 
+  
+    for (i = 0; i < N; i++) 
+        pthread_join(thread_id[i], NULL); 
+} 
