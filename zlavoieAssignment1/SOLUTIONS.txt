@@ -1,0 +1,49 @@
+Assignment 1
+Zoe Lavoie
+September 28th, 2018
+
+Part A
+1.      Command Line: cat /proc/cpuinfo
+Model: 62
+Model Name: Intel (R) Xeon (R) CPU E5-2670 v2 @ 2.50 GHz
+
+2.      Command Line: cat /proc/version   
+ Version of the Linux kernel being used: 4.40-38-generic
+
+3.      Command Line: last reboot
+Result: reboot system boot 4.40-38-generic Wed Sep 12 23;30 - 02:51 (03:21)
+
+4. Command Line: iostat /proc/diskstats
+ Average CPU Time Spent Executing In: User Mode: 5.80%
+ 
+*Can also get avg. CPU time executing in user mode through cat /proc/diskstats
+*Average CPU Time Spent Executing In: System Mode: 37519 Jiffies or 375.19 seconds or 6.25 minutes
+
+Average CPU Time Spent Executing In: System Mode: 2.23%
+*Can also get Avg. CPU time executing in system mode through cat /proc/diskstats
+*Average CPU Time Spent Executing In: System Mode: 1165370 Jiffies or 11653.7 seconds or 194.23 minutes or 3.24 hours
+
+Average CPU Time Spent Executing In: Idle: 91.38 %
+*Can also get avg. CPU time executing in idle mode through cat /proc/diskstats
+*Average CPU Time Spent Executing In: System Mode: 40188 Jiffies or 401.88 seconds or 6.698 minutes
+
+5.Command Line: cat /proc/meminfo
+Memory Configured Into It: 
+MemTotal: 7473992 kB
+
+6. Command Line: cat /proc/meminfo
+Memory Currently Available On It:
+MemFree: 6484136 kB
+
+7.      Command Line:cat /proc/diskstats 
+Disk Read/Write Requests Number:
+Device Name: xda1     Reads Completed: 20919
+Device Name: xda1     Writes Completed: 2873
+    
+8.     Command Line: cat /proc/stat
+Context Switches: 735384
+ 
+9.     Command Line: cat /proc/stat
+Number of Processes Created Since Reboot: 11865
+
+
